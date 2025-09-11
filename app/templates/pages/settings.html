@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="settings-layout">
+
+    <!-- Sidebar nav -->
+    <nav class="settings-sidebar">
+        <a href="#rules" class="settings-sidebar-link is-active" data-nav="rules">Rules</a>
+        <a href="#filters" class="settings-sidebar-link" data-nav="filters">Filters</a>
+        <a href="#notifications" class="settings-sidebar-link" data-nav="notifications">Notifications</a>
+        <a href="#display" class="settings-sidebar-link" data-nav="display">Display</a>
+        <a href="#reset" class="settings-sidebar-link" data-nav="reset">Reset</a>
+    </nav>
+
+    <!-- Content -->
+    <div class="settings-content">
+
+        <!-- ─── Rules ─────────────────────────── -->
+        <section id="rules" class="settings-section" data-section-panel="rules">
+            <h2 class="settings-section-title">Detection Rules</h2>
+            <p class="settings-section-desc">
+                Each rule watches for a price increase of at least
+                <strong>threshold %</strong> over a <strong>lookback</strong> period.
+            </p>
+            <div class="rule-examples">
+                <span class="rule-example-label">e.g.</span>
+                <span class="rule-example-chip">0.3% / 2m</span>
+                <span class="rule-example-chip">2% / 2m</span>
+                <span class="rule-example-chip">5% / 5m</span>
+                <span class="rule-example-chip">10% / 20m</span>
+            </div>
+
+            <table class="rules-table">
+                <thead>
+                    <tr>
+                        <th>Threshold</th>
+                        <th>Lookback</th>
+                        <th>Color</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody data-el="rules-tbody">
+                    {% for rule in rules %}
+                    <tr data-rule-id="{{ rule.id }}">
+                        <td data-col="threshold">{{ rule.threshold_pct }}%</td>
+                        <td data-col="lookback">{{ rule.lookback_min }} min</td>
+                        <td data-col="color"><span class="rule-dot" style="--rule-color: {{ rule.color or '#10b981' }}"></span></td>
+                        <td>
+                            <label class="toggle">
+                                <input type="checkbox" data-action="toggle-rule" data-rule-id="{{ rule.id }}"
+                                       {% if rule.enabled %}checked{% endif %} class="toggle-input">
+                                <div class="toggle-track"></div>
+                            </label>
+                        </td>
+                        <td class="rules-table-actions">
+                            <button type="button" data-action="edit-rule" data-rule-id="{{ rule.id }}"
+                                    class="btn btn-icon" title="Edit"><i class="ri-pencil-line"></i></button>
+                            <button type="button" data-action="delete-rule" data-rule-id="{{ rule.id }}"
+                                    class="btn btn-icon btn-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Color palette (hidden, used by inline picker) -->
+            <div data-el="color-palette" class="is-hidden">
+                {% for c in colors %}
+                <span data-color="{{ c.hex }}" data-name="{{ c.name }}"></span>
+                {% endfor %}
+            </div>
+
+            <div class="settings-actions">
+                <button type="button" data-action="add-rule" class="btn btn-ghost">
+                    <i class="ri-add-line"></i> Add Rule
+                </button>
+                <button type="button" data-action="reset-section" data-section="rules" class="btn btn-ghost">
+                    <i class="ri-refresh-line"></i> Reset
+                </button>
+            </div>
+        </section>
+
+        <!-- ─── Notifications ─────────────────── -->
+        <section id="notifications" class="settings-section is-hidden" data-section-panel="notifications">
+            <h2 class="settings-section-title">Notifications</h2>
+
+            <div data-el="notifications-section" class="settings-rows">
+                <div class="settings-row">
+                    <div>
+                        <label>Sound alerts</label>
+                        <p class="settings-section-hint">Play a sound when a pump signal is detected</p>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" data-field="notif-sound-enabled" checked class="toggle-input">
+                        <div class="toggle-track"></div>
+                    </label>
+                </div>
+
+                <div class="settings-row">
+                    <div>
+                        <label>Alert sound</label>
+                        <p class="settings-section-hint">Sound to play on new signal</p>
+                    </div>
+                    <div class="custom-select" data-field="notif-sound-file">
+                        <button type="button" class="custom-select-btn" data-action="toggle-select">
+                            <span class="custom-select-label">Pulse</span>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </button>
+                        <div class="custom-select-dropdown">
+                            {% for s in sounds %}
+                            <button type="button" class="custom-select-option" data-value="{{ s|lower }}.wav">{{ s }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <div>
+                        <label>Alert cooldown (sec)</label>
+                        <p class="settings-section-hint">
+                            Mutes sound after 3 alerts in a row.<br>
+                            Sound resumes after this pause.
+                        </p>
+                    </div>
+                    <div class="settings-input-compact">
+                        <div class="num-stepper">
+                            <button type="button" class="num-stepper-btn" data-action="step-down" data-target="notif-cooldown">−</button>
+                            <input type="number" data-field="notif-cooldown" min="5" max="300" step="5" value="15"
+                                   class="num-stepper-input">
+                            <button type="button" class="num-stepper-btn" data-action="step-up" data-target="notif-cooldown">+</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="settings-row">
+                    <div>
+                        <label>Dedup hold (min)</label>
+                        <p class="settings-section-hint">
+                            After a signal fires, the same pair + rule<br>
+                            is muted for this period
+                        </p>
+                    </div>
+                    <div class="settings-input-compact">
+                        <div class="num-stepper">
+                            <button type="button" class="num-stepper-btn" data-action="step-down" data-target="notif-dedupe-hold">−</button>
+                            <input type="number" data-field="notif-dedupe-hold" min="0" max="1440" step="5" value="30"
+                                   class="num-stepper-input">
+                            <button type="button" class="num-stepper-btn" data-action="step-up" data-target="notif-dedupe-hold">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button type="button" data-action="reset-section" data-section="notifications" class="btn btn-ghost">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Filters ───────────────────────── -->
+        <section id="filters" class="settings-section is-hidden" data-section-panel="filters">
+            <h2 class="settings-section-title">Filters</h2>
+
+            <div data-el="filters-section" class="settings-rows">
+                <div class="settings-row">
+                    <div>
+                        <label>Min 24h volume (USD)</label>
+                        <p class="settings-section-hint">Exclude symbols below this USD turnover</p>
+                    </div>
+                    <div class="settings-input-compact">
+                        <div class="num-stepper">
+                            <button type="button" class="num-stepper-btn" data-action="step-down" data-target="filter-volume">−</button>
+                            <input type="text" data-field="filter-volume" data-min="0" data-max="50000000" data-step="50000"
+                                   value="300,000" class="num-stepper-input num-stepper-formatted num-stepper-wide">
+                            <button type="button" class="num-stepper-btn" data-action="step-up" data-target="filter-volume">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <div>
+                        <label>Min symbol age (days)</label>
+                        <p class="settings-section-hint">Exclude recently listed symbols</p>
+                    </div>
+                    <div class="settings-input-compact">
+                        <div class="num-stepper">
+                            <button type="button" class="num-stepper-btn" data-action="step-down" data-target="filter-age">−</button>
+                            <input type="number" data-field="filter-age" min="0" max="365" step="1" value="88"
+                                   class="num-stepper-input">
+                            <button type="button" class="num-stepper-btn" data-action="step-up" data-target="filter-age">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-field">
+                    <label>Watchlist</label>
+                    <p class="settings-section-hint">Only show signals for these symbols (empty = all)</p>
+                    <div class="tag-input-row">
+                        <div class="tag-input-wrap">
+                            <input type="text" data-field="watchlist-input" maxlength="24"
+                                   placeholder="e.g. BTCUSDT" class="tag-input" autocomplete="off">
+                            <div class="tag-dropdown" data-el="watchlist-dropdown"></div>
+                        </div>
+                        <button type="button" data-action="add-watchlist"
+                                class="tag-input-btn" title="Add"><i class="ri-add-line"></i></button>
+                    </div>
+                    <div class="chip-list" data-el="watchlist-chips"></div>
+                </div>
+
+                <div class="settings-field">
+                    <label>Blacklist</label>
+                    <p class="settings-section-hint">Always exclude these symbols</p>
+                    <div class="tag-input-row">
+                        <div class="tag-input-wrap">
+                            <input type="text" data-field="blacklist-input" maxlength="24"
+                                   placeholder="e.g. DOGEUSDT" class="tag-input" autocomplete="off">
+                            <div class="tag-dropdown" data-el="blacklist-dropdown"></div>
+                        </div>
+                        <button type="button" data-action="add-blacklist"
+                                class="tag-input-btn" title="Add"><i class="ri-add-line"></i></button>
+                    </div>
+                    <div class="chip-list" data-el="blacklist-chips"></div>
+                </div>
+
+                <div class="settings-actions">
+                    <button type="button" data-action="reset-section" data-section="filters" class="btn btn-ghost">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Display ───────────────────────── -->
+        <section id="display" class="settings-section is-hidden" data-section-panel="display">
+            <h2 class="settings-section-title">Display</h2>
+
+            <div data-el="display-section" class="settings-rows">
+                <div class="settings-row">
+                    <label>Timezone</label>
+                    <div class="custom-select" data-field="display-timezone">
+                        <button type="button" class="custom-select-btn" data-action="toggle-select">
+                            <span class="custom-select-label">UTC</span>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </button>
+                        <div class="custom-select-dropdown">
+                            {% for tz in timezones %}
+                            <button type="button" class="custom-select-option" data-value="{{ tz }}">{{ tz }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <label>Rows per page</label>
+                    <div class="num-stepper">
+                        <button type="button" class="num-stepper-btn" data-action="step-down" data-target="display-rows">−</button>
+                        <input type="number" data-field="display-rows" min="5" max="100" step="1" value="8"
+                               class="num-stepper-input">
+                        <button type="button" class="num-stepper-btn" data-action="step-up" data-target="display-rows">+</button>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <label>Show Coinglass link</label>
+                    <label class="toggle">
+                        <input type="checkbox" data-field="display-coinglass" checked class="toggle-input">
+                        <div class="toggle-track"></div>
+                    </label>
+                </div>
+
+                <div class="settings-row">
+                    <label>Show TradingView link</label>
+                    <label class="toggle">
+                        <input type="checkbox" data-field="display-tradingview" checked class="toggle-input">
+                        <div class="toggle-track"></div>
+                    </label>
+                </div>
+
+                <div class="settings-actions">
+                    <button type="button" data-action="reset-section" data-section="display" class="btn btn-ghost">Reset</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Upgrade hint (visible on all tabs except Reset) -->
+        <div class="settings-upgrade-hint" data-section-panel="upgrade">
+            <p>Need more exchanges, custom rules, or a personal setup?</p>
+            <a href="{{ url_for('site.upgrade') }}" class="settings-upgrade-link">See available services</a>
+        </div>
+
+        <!-- ─── Reset ─────────────────────────── -->
+        <section id="reset" class="settings-section is-hidden" data-section-panel="reset">
+            <h2 class="settings-section-title">Factory Reset</h2>
+            <p class="settings-section-desc">
+                Reset the application to its original state. This will restore all detection rules,
+                notification preferences, filters, and display options to their factory defaults.
+            </p>
+
+            <div class="settings-rows">
+                <div class="settings-row">
+                    <div>
+                        <label>What gets reset</label>
+                        <ul class="settings-example-list">
+                            <li>Detection rules — replaced with the default rule (2% / 2 min)</li>
+                            <li>Notifications — sound enabled, 30s cooldown</li>
+                            <li>Filters — default volume and age thresholds, watchlist and blacklist cleared</li>
+                            <li>Display — UTC timezone, 8 rows per page, all links enabled</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button type="button" data-action="reset-all" class="btn btn-outline-danger">Reset All Settings</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<!-- Toast container -->
+<div data-el="toast-container" class="toast-container"></div>
+
+<script src="{{ url_for('static', filename='js/helpers.js') }}?v={{ app_version }}"></script>
+<script src="{{ url_for('static', filename='js/settings.js') }}?v={{ app_version }}" defer></script>
+{% endblock %}

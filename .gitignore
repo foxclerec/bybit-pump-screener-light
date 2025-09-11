@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SQLite database and migrations
+instance/*.db
+instance/*.sqlite3
+*.sqlite3
+
+# Runtime data
+instance/runtime_metrics.json
+logs/
+
+# Flask / Cache / Build
+*.pid
+*.seed
+*.bak
+*.swp
+*.swo
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+.eggs/
+
+# Node (если Tailwind/JS билдится)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Env / secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# Compiled CSS/JS bundles (если используешь Tailwind build)
+app/static/css/*.min.css
+app/static/js/*.min.js
+
+# Claude Code config (private hooks, rules, commands)
+.claude/
+
+# Local docs (private research, plans, decisions)
+docs/
+ROADMAP.md
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.webp
+
+# Test artifacts
+tests/screenshots/
+playwright-report/
+test-results/
+.pytest_cache/

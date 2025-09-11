@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<section class="article-page">
+    <header class="article-header">
+        <h1 class="article-title">{{ title }}</h1>
+        {% if updated_at %}
+        <p class="article-date">Last updated: {{ updated_at }}</p>
+        {% endif %}
+    </header>
+
+    <article class="article">
+        {% block page_content %}{% endblock %}
+    </article>
+</section>
+{% endblock %}

@@ -1,0 +1,139 @@
+name: Build & Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: PumpScreener-Windows
+          - os: macos-latest
+            artifact: PumpScreener-macOS
+          - os: ubuntu-latest
+            artifact: PumpScreener-Linux
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      # Linux: install WebKitGTK (required by pywebview)
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gir1.2-webkit2-4.1 \
+            libgirepository1.0-dev \
+            gcc \
+            libcairo2-dev \
+            pkg-config \
+            python3-dev
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: pyinstaller pump_screener.spec --noconfirm
+
+      - name: List build output
+        run: ls -la dist/PumpScreener/
+        shell: bash
+
+      # Smoke test: verify the binary exists and data files are bundled
+      - name: Verify build artifacts
+        shell: bash
+        run: |
+          echo "--- Checking binary ---"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            test -f dist/PumpScreener/PumpScreener.exe
+          else
+            test -f dist/PumpScreener/PumpScreener
+          fi
+          echo "Binary: OK"
+
+          echo "--- Checking data files ---"
+          test -d dist/PumpScreener/_internal/app/templates
+          test -d dist/PumpScreener/_internal/app/static
+          test -d dist/PumpScreener/_internal/app/screener/assets
+          echo "Data files: OK"
+
+      - name: Generate SHA256 checksum
+        shell: bash
+        run: |
+          cd dist
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            sha256sum PumpScreener/PumpScreener.exe > SHA256SUMS.txt
+          elif [ "$RUNNER_OS" = "macOS" ]; then
+            shasum -a 256 PumpScreener/PumpScreener > SHA256SUMS.txt
+          else
+            sha256sum PumpScreener/PumpScreener > SHA256SUMS.txt
+          fi
+          cat SHA256SUMS.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/PumpScreener/
+          retention-days: 30
+
+      - name: Upload checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}-SHA256
+          path: dist/SHA256SUMS.txt
+          retention-days: 30
+
+  # Attach artifacts to GitHub Release when triggered by a tag
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Create archives for release
+        shell: bash
+        run: |
+          cd artifacts
+          for dir in PumpScreener-Windows PumpScreener-macOS PumpScreener-Linux; do
+            if [ -d "$dir" ]; then
+              zip -r "${dir}.zip" "$dir/"
+            fi
+          done
+          # Merge checksums
+          cat *-SHA256/SHA256SUMS.txt > SHA256SUMS.txt 2>/dev/null || true
+          ls -la
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/PumpScreener-Windows.zip
+            artifacts/PumpScreener-macOS.zip
+            artifacts/PumpScreener-Linux.zip
+            artifacts/SHA256SUMS.txt
+          fail_on_unmatched_files: false

@@ -1,0 +1,39 @@
+# Virtual environment
+.venv/
+
+# Runtime data
+instance/
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Media / binary
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mp3
+*.wav
+*.pdf
+*.zip
+
+# Cache / build
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets
+.env
+*.env
+
+# Test artifacts
+tests/screenshots/
+playwright-report/
+test-results/

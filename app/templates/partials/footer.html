@@ -1,0 +1,45 @@
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="page-footer-divider"></div>
+
+    <div class="page-container page-footer-inner">
+        <!-- left: copyright + version -->
+        <p class="footer-copyright">
+            &copy; {{ current_year }} {{ site_title or 'Pump Alerts' }} &middot;
+            <span class="status-badge">{{ app_version }}</span>
+        </p>
+
+        <!-- center: legal links -->
+        <nav aria-label="Legal" class="footer-links">
+            <a href="{{ url_for('site.privacy') }}">Privacy</a>
+            <a href="{{ url_for('site.terms') }}">Terms</a>
+            <a href="{{ url_for('site.disclaimer') }}">Disclaimer</a>
+        </nav>
+
+        <!-- right: coins + app & exchange status -->
+        <div class="footer-badges">
+            <!-- active coins count -->
+            <span class="status-badge" data-coins-badge title="Monitored symbols — updates every 15 s">
+                <span class="status-label" data-coins-label>coins: —</span>
+            </span>
+
+            <!-- app status -->
+            <span class="status-badge" data-app-badge>
+                <span class="status-dot" data-app-dot></span>
+                <span class="status-label" data-app-label>app</span>
+            </span>
+
+            <!-- screener status -->
+            <span class="status-badge" data-screener-badge>
+                <span class="status-dot" data-screener-dot></span>
+                <span class="status-label" data-screener-label>screener</span>
+            </span>
+
+            <!-- exchange status -->
+            <span class="status-badge" data-ex-badge>
+                <span class="status-dot" data-ex-dot></span>
+                <span class="status-label" data-ex-label>bybit</span>
+            </span>
+        </div>
+    </div>
+</footer>

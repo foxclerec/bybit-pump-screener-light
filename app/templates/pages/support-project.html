@@ -1,0 +1,93 @@
+{% extends "upgrade_layout.html" %}
+{% set title = "Support" %}
+{% set subtitle = "" %}
+
+{% block body %}
+
+<!-- About the project -->
+<p class="feature-subtitle">
+    Every pump screener I found was either locked behind a paywall or unusable.<br>
+    So I built my own and made it free, open-source, and available to everyone.
+</p>
+
+<!-- Share this project -->
+<div class="share-box">
+    <h2 class="share-box-title">
+        <i class="ri-share-line" style="color: var(--blue-500); opacity: 0.8;"></i>
+        Share This Project
+    </h2>
+    <p class="share-box-text">
+        Know someone who trades crypto? Share the GitHub repo and help more traders
+        discover a free, open-source pump screener.
+    </p>
+    <div class="share-box-input-row">
+        <input
+            type="text"
+            readonly
+            value="{{ github_repo_url }}"
+            data-share-url
+            class="share-box-input"
+        />
+        <button
+            type="button"
+            data-action="copy-share-url"
+            class="share-box-copy-btn"
+        >
+            <i class="ri-file-copy-line"></i>
+            Copy
+        </button>
+    </div>
+    <div class="share-box-links">
+        <a href="{{ github_repo_url }}" target="_blank" rel="noopener noreferrer">
+            <i class="ri-github-fill"></i>
+            View on GitHub
+        </a>
+        <span class="share-box-separator">|</span>
+        <a href="{{ github_repo_url }}/stargazers" target="_blank" rel="noopener noreferrer">
+            <i class="ri-star-line" style="color: rgba(251, 191, 36, 0.7);"></i>
+            Star the repo
+        </a>
+    </div>
+</div>
+
+<!-- Donate -->
+<div class="share-box" id="donate">
+    <h2 class="share-box-title">
+        <i class="ri-heart-line" style="color: var(--rose-400); opacity: 0.8;"></i>
+        Donate
+    </h2>
+    <p class="share-box-text">
+        If you find this tool useful, a small contribution helps keep the project going.
+    </p>
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-5);">
+        <a href="{{ kofi_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+            <i class="ri-cup-line"></i> Ko-fi
+        </a>
+        <span style="color: var(--color-text-secondary); font-size: 0.65rem; letter-spacing: 0.05em;">OR</span>
+        <a href="{{ donation_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+            <i class="ri-coin-line"></i> Crypto
+        </a>
+    </div>
+    <p class="text-muted-sm" style="margin-top: var(--space-4);">
+        Want to accept crypto payments on your own project?
+        <a href="{{ url_for('site.go_nowpayments') }}" target="_blank" rel="noopener noreferrer"
+           style="color: var(--color-text-muted); text-decoration: underline; text-underline-offset: var(--underline-offset);"
+           onmouseover="this.style.color='var(--emerald-400)'" onmouseout="this.style.color='var(--color-text-muted)'"
+        >Learn how</a>
+    </p>
+</div>
+
+<script>
+document.querySelector('[data-action="copy-share-url"]')?.addEventListener('click', function () {
+    const url = document.querySelector('[data-share-url]')?.value;
+    if (!url) return;
+    const btn = this;
+    navigator.clipboard.writeText(url).then(() => {
+        btn.innerHTML = '<i class="ri-check-line" style="color: var(--emerald-400);"></i> Copied!';
+        setTimeout(() => {
+            btn.innerHTML = '<i class="ri-file-copy-line"></i> Copy';
+        }, 2000);
+    });
+});
+</script>
+{% endblock %}

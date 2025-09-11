@@ -1,0 +1,63 @@
+{% extends "static_page.html" %}
+{% set title = "Terms of Service" %}
+{% set updated_at = "2026-03-30" %}
+
+{% block page_content %}
+<p>These Terms of Service ("Terms") govern your use of the Pump Alerts application (the "App"). By downloading,
+    installing, or using the App, you agree to these Terms.</p>
+
+<h2>1) Open-Source License</h2>
+<p>Pump Alerts is free, open-source software distributed under the <strong>MIT License</strong>
+    (see LICENSE.txt in the repository). You are free to use, copy, modify, merge, publish, distribute,
+    sublicense, and/or sell copies of the Software, subject to the conditions of the MIT License.</p>
+
+<h2>2) No Financial Advice &amp; Trading Risks</h2>
+<p>The operator of Pump Alerts is <strong>not a registered investment adviser, broker-dealer, or financial
+        analyst</strong> with any regulatory authority. The App and its outputs are for
+    <strong>educational/informational purposes only</strong> and <strong>do not constitute financial, investment,
+        legal, tax, or accounting advice</strong>. Trading involves substantial risk; past performance does not
+    guarantee future results. Many participants in cryptocurrency markets lose money.
+    You are solely responsible for your decisions and compliance with applicable laws.
+    See our <a href="{{ url_for('site.disclaimer') }}">Risk Disclaimer</a> for full details.</p>
+
+<h2>3) Third-Party Services</h2>
+<p>The App fetches public market data from third-party APIs. You must comply with those providers' terms
+    and privacy policies. We are not responsible for their availability, accuracy, or policy changes.</p>
+
+<h2>4) Availability &amp; Support</h2>
+<p>The App is provided on a best-effort basis without uptime guarantees. Community support is available
+    via the project's GitHub repository. There is no obligation to provide support, maintenance, or updates.</p>
+
+<h2>5) Privacy</h2>
+<p>We do not collect personal data inside the App. If you contact us for support, we may receive minimal
+    information you provide. See our <a href="{{ url_for('site.privacy') }}">Privacy Policy</a> for details.</p>
+
+<h2>6) Disclaimer of Warranties</h2>
+<p>The App is provided <strong>"as is" and "as available"</strong>, without warranties of any kind, express or implied,
+    including merchantability, fitness for a particular purpose, and non-infringement. We do not warrant accuracy,
+    uninterrupted operation, or error-free performance.</p>
+
+<h2>7) Limitation of Liability</h2>
+<p>To the maximum extent permitted by law, the authors and contributors are <strong>not liable</strong> for any
+    indirect, incidental, special, consequential, exemplary, or punitive damages, loss of profits, loss of data,
+    or trading losses arising from the use of, inability to use, or reliance on the App or its outputs.</p>
+
+<h2>8) Affiliate &amp; Referral Links</h2>
+<p>The App may contain affiliate or referral links to cryptocurrency exchanges and third-party services
+    (such as payment processors). If you register via these links, the project maintainer may receive a
+    commission at <strong>no additional cost to you</strong>. These links do not influence the App's
+    functionality. You are under no obligation to use them.</p>
+
+<h2>9) Export &amp; Sanctions</h2>
+<p>You must not use or distribute the App in violation of export control or sanctions laws. You represent you are not
+    located in, or a resident of, any embargoed jurisdiction and are not a prohibited party.</p>
+
+<h2>10) Changes to Terms</h2>
+<p>We may update these Terms from time to time. When we do, we will update the date above. Your continued use of
+    the App after changes means you accept the updated Terms.</p>
+
+<h2>11) Contact</h2>
+<p>
+    Email: <strong>{{ support_email }}</strong>
+</p>
+{% endblock %}
