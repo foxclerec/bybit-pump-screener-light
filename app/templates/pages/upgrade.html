@@ -1,0 +1,77 @@
+{% extends "upgrade_layout.html" %}
+{% set title = "Upgrade" %}
+{% set subtitle = "Custom services to get the most out of your screener." %}
+{% set email_subject = "Service Request" %}
+
+{% block body %}
+
+<div class="service-grid">
+
+    <!-- Free Consultation -->
+    <div class="service-card">
+        <span class="service-card-price">free</span>
+        <i class="ri-chat-3-line service-card-icon" aria-hidden="true"></i>
+        <h3 class="service-card-title">Text Consultation</h3>
+        <p class="service-card-description">
+            Questions about the screener, setup help, or feature ideas. I'll reply with a clear next step.
+        </p>
+    </div>
+
+    <!-- VPS Setup -->
+    <div class="service-card">
+        <span class="service-card-price">from $99</span>
+        <i class="ri-server-line service-card-icon" aria-hidden="true"></i>
+        <h3 class="service-card-title">VPS Setup</h3>
+        <p class="service-card-description">
+            Screener installed on your VPS, configured, and running 24/7. Always online, no PC required.
+        </p>
+    </div>
+
+    <!-- Crypto News Digest -->
+    <div class="service-card">
+        <span class="service-card-price">from $249</span>
+        <i class="ri-newspaper-line service-card-icon" aria-hidden="true"></i>
+        <h3 class="service-card-title">Crypto News Digest</h3>
+        <p class="service-card-description">
+            AI-curated crypto news feed — stay informed without scrolling 10 sites. Standalone app or built into your screener.
+        </p>
+    </div>
+
+    <!-- Exchange Integration -->
+    <div class="service-card">
+        <span class="service-card-price">from $249</span>
+        <i class="ri-exchange-line service-card-icon" aria-hidden="true"></i>
+        <h3 class="service-card-title">Exchange Integration</h3>
+        <p class="service-card-description">
+            Add another exchange to your screener. Full adapter with volume filters and symbol support.
+        </p>
+    </div>
+
+    <!-- Trading Bot -->
+    <div class="service-card">
+        <span class="service-card-price">from $499</span>
+        <i class="ri-robot-line service-card-icon" aria-hidden="true"></i>
+        <h3 class="service-card-title">Trading Bot</h3>
+        <p class="service-card-description">
+            Automated trading that acts on screener signals. Your rules, your exchange, hands-free execution.
+        </p>
+    </div>
+
+    <!-- Custom Solution -->
+    <div class="service-card">
+        <span class="service-card-price">from $1,499</span>
+        <i class="ri-code-s-slash-line service-card-icon" aria-hidden="true"></i>
+        <h3 class="service-card-title">Custom Solution</h3>
+        <p class="service-card-description">
+            Custom screener, signals, or a tool built from scratch — tailored to your exchange, pairs, and strategy.
+        </p>
+    </div>
+
+</div>
+
+<!-- Contact -->
+<p class="text-muted-sm">
+    Interested in any of these? Use the contact link in the header — I'll reply with details and a fixed price.
+</p>
+
+{% endblock %}

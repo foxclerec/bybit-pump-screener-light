@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Pump Alerts{% endblock %}
+
+{% block content %}
+
+<div class="table-wrap">
+
+  <!-- DESKTOP TABLE (≥ md) -->
+  <table class="signal-table">
+    <colgroup>
+      <col style="width:9%">
+      <col style="width:9%">
+      <col style="width:18%">
+      <col style="width:14%">
+      <col style="width:10%">
+      <col style="width:40%">
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th class="col-left">Time</th>
+        <th class="col-left">Exchange</th>
+        <th class="col-left">Pairs</th>
+        <th class="col-center">Rule</th>
+        <th class="col-right">Pump</th>
+        <th class="col-right">Links</th>
+      </tr>
+    </thead>
+
+    <tbody id="signals-desktop-body"></tbody>
+  </table>
+
+  <!-- MOBILE (< md) -->
+  <div class="signal-card-list">
+    <div id="signals-mobile-list"></div>
+  </div>
+
+  <!-- Pagination + actions row -->
+  <div class="table-footer">
+    <a href="#" class="clear-signals-link" data-action="clear-signals"
+       title="Clear all signals from the database">
+      <i class="ri-delete-bin-line"></i> Clear
+    </a>
+    <div id="signals-pagination"></div>
+  </div>
+
+</div>
+
+<p class="table-disclaimer">Signals indicate detected price movement, not trading recommendations. Always do your own research.</p>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/favicon-180x180.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <meta name="theme-color" content="#0ea371">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Fonts: Inter (UI) + JetBrains Mono (data) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <title>{% block title %}Pump Alerts{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v={{ app_version }}">
+
+    {% block head_extra %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="page-header">
+        <div class="page-container">
+            <div class="nav-bar">
+                <!-- Logo + mute toggle -->
+                <div class="nav-bar-brand">
+                    <a href="{{ url_for('site.index') }}" aria-label="Home" class="nav-bar-logo">
+                        <h1>{{ site_title or 'Pump Alerts' }}</h1>
+                    </a>
+                    <button type="button" data-action="mute-toggle" aria-label="Toggle mute"
+                       class="btn btn-icon"
+                       title="Sound on">
+                        <i class="ri-volume-up-line" data-mute-icon></i>
+                    </button>
+                </div>
+
+                <!-- Right side -->
+                <div class="nav-bar-actions">
+                    <!-- Support -->
+                    <a href="{{ url_for('site.support_project') }}" aria-label="Support the project"
+                       class="btn btn-ghost btn-support">
+                        <i class="ri-heart-line"></i>
+                        <span>Support</span>
+                    </a>
+
+                    <!-- Upgrade -->
+                    <a href="{{ url_for('site.upgrade') }}" aria-label="Upgrade"
+                       class="btn btn-ghost">
+                        <i class="ri-rocket-line"></i>
+                        <span>Upgrade</span>
+                    </a>
+
+                    <!-- Settings -->
+                    <a href="{{ url_for('site.settings') }}" aria-label="Settings"
+                       class="btn btn-ghost">
+                        <i class="ri-settings-3-line"></i>
+                        <span>Settings</span>
+                    </a>
+
+                    <!-- Email (split button: left = mailto, right = copy) -->
+                    <span class="split-btn">
+                        <a href="mailto:{{ support_email }}?subject={{ email_subject | default('Support Request') | urlencode }}"
+                            aria-label="Email support"
+                            class="split-btn-main">
+                            <i class="ri-mail-line"></i>
+                            <span>E-mail</span>
+                        </a>
+                        <span class="split-btn-divider"></span>
+                        <button type="button"
+                            class="split-btn-action"
+                            data-copy="{{ support_email }}"
+                            aria-label="Copy email">
+                            <i class="ri-file-copy-line"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>

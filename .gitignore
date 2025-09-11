@@ -1,0 +1,95 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Instance (DB, runtime data, secrets)
+instance/
+*.sqlite3
+logs/
+
+# Flask / Cache / Build
+*.pid
+*.seed
+*.bak
+*.swp
+*.swo
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+.eggs/
+
+# Node (если Tailwind/JS билдится)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Env / secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# Compiled CSS/JS bundles (если используешь Tailwind build)
+app/static/css/*.min.css
+app/static/js/*.min.js
+
+# Claude Code config (private hooks, rules, commands)
+.claude/
+.claudeignore
+CLAUDE.md
+
+# MCP config (local paths)
+.mcp.json
+
+# Playwright MCP
+.playwright-mcp/
+
+# Local docs (private research, plans, decisions)
+docs/
+_plan.md
+ROADMAP.md
+
+# PyInstaller artifacts
+*.exe
+*.spec
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.webp
+
+# Allow assets/ for README images
+!assets/
+!assets/**
+
+# Test artifacts
+tests/screenshots/
+playwright-report/
+test-results/
+.pytest_cache/

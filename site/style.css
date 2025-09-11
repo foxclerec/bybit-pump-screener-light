@@ -1,0 +1,588 @@
+/* ================================================================
+   Pump Alerts — Landing Page Styles
+   Dark theme matching the main app design system.
+   Single-page, no frameworks, mobile-first.
+   ================================================================ */
+
+/* ----- Reset ----- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ----- Tokens (matching app design system) ----- */
+:root {
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --color-bg:         #080c14;
+    --color-bg-surface: #0d1219;
+    --color-bg-card:    #111820;
+    --color-bg-elevated:#161d27;
+
+    --color-text:       #f0f2f5;
+    --color-text-soft:  #b8bfc9;
+    --color-text-muted: #4a5568;
+
+    --color-border:     #1e2530;
+    --color-accent:     #10b981;
+    --color-accent-light:#34d399;
+    --color-accent-glow: rgba(16, 185, 129, 0.15);
+
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.25);
+    --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.1);
+
+    --duration: 300ms;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Base ----- */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    background: var(--color-bg);
+}
+
+a {
+    color: var(--color-accent-light);
+    text-decoration: none;
+    transition: color var(--duration) var(--ease);
+}
+
+a:hover {
+    color: #6ee7b7;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+img, svg {
+    display: block;
+}
+
+/* ----- Container ----- */
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ================================================================
+   NAV
+   ================================================================ */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: rgba(8, 12, 20, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3.5rem;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.nav-logo:hover {
+    color: var(--color-text);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--color-text-soft);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: var(--color-text);
+}
+
+.nav-github {
+    display: flex;
+    align-items: center;
+}
+
+/* ================================================================
+   HERO
+   ================================================================ */
+.hero {
+    padding: 8rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle radial glow behind hero */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse, var(--color-accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-accent-light);
+    background: var(--color-accent-glow);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 9999px;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.025em;
+    margin-bottom: 1rem;
+}
+
+.hero-sub {
+    font-size: 1.1rem;
+    color: var(--color-text-soft);
+    max-width: 480px;
+    margin-bottom: 2rem;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--duration) var(--ease);
+    text-decoration: none;
+}
+
+.btn-lg {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: var(--color-accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #0ea471;
+    color: #fff;
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.3);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--color-text-soft);
+    border: 1px solid var(--color-border);
+}
+
+.btn-ghost:hover {
+    color: var(--color-text);
+    border-color: #2d3748;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Hero chart SVG */
+.hero-visual {
+    display: flex;
+    justify-content: center;
+}
+
+.hero-chart {
+    width: 100%;
+    max-width: 526px;
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.08));
+    opacity: 0.85;
+}
+
+/* ================================================================
+   FEATURES
+   ================================================================ */
+.features {
+    padding: 5rem 0;
+}
+
+.section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: -0.02em;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.feature-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+
+.feature-card:hover {
+    border-color: rgba(16, 185, 129, 0.25);
+    box-shadow: var(--shadow-glow);
+}
+
+.feature-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent-glow);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+}
+
+.feature-icon svg {
+    display: inline;
+}
+
+.feature-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.5;
+}
+
+/* ================================================================
+   HOW IT WORKS
+   ================================================================ */
+.how-it-works {
+    padding: 4rem 0 5rem;
+}
+
+.steps-grid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.step {
+    text-align: center;
+    max-width: 240px;
+}
+
+.step-number {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-accent-light);
+    background: var(--color-accent-glow);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.step h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.step p {
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+}
+
+.step-arrow {
+    padding-top: 0.75rem;
+    opacity: 0.4;
+}
+
+/* ================================================================
+   DOWNLOAD
+   ================================================================ */
+.download {
+    padding: 5rem 0;
+    background: var(--color-bg-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.download-inner {
+    text-align: center;
+}
+
+.download-sub {
+    color: var(--color-text-soft);
+    margin-bottom: 2.5rem;
+    margin-top: -1.5rem;
+}
+
+.download-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.btn-download {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all var(--duration) var(--ease);
+    min-width: 200px;
+}
+
+.btn-download:hover {
+    border-color: rgba(16, 185, 129, 0.35);
+    box-shadow: var(--shadow-glow);
+    color: var(--color-text);
+}
+
+.btn-download svg {
+    flex-shrink: 0;
+    color: var(--color-text-soft);
+}
+
+.btn-download:hover svg {
+    color: var(--color-accent-light);
+}
+
+.btn-download div {
+    text-align: left;
+}
+
+.btn-download small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-download strong {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.download-note {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.download-note a {
+    color: var(--color-text-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.download-note a:hover {
+    color: var(--color-accent-light);
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.footer {
+    padding: 2.5rem 0;
+}
+
+.footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text-soft);
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+
+.footer-links a:hover {
+    color: var(--color-text-soft);
+}
+
+.footer-copy {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 768px) {
+    .nav-links a:not(.nav-github) {
+        display: none;
+    }
+
+    .hero {
+        padding: 5.5rem 0 3rem;
+    }
+
+    .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-sub {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-cta {
+        justify-content: center;
+    }
+
+    .hero-visual {
+        order: -1;
+        max-width: 360px;
+        margin: 0 auto;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .steps-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+
+    .download-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-download {
+        width: 100%;
+        max-width: 280px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ----- Grain texture (subtle) ----- */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.015;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    z-index: 9999;
+}
+
+/* ----- Focus visible (a11y) ----- */
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}

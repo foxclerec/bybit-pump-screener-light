@@ -1,0 +1,83 @@
+{% extends "static_page.html" %}
+{% set title = "Privacy Policy" %}
+{% set updated_at = "2026-03-30" %}
+
+{% block page_content %}
+<h2>Overview</h2>
+<p>
+    Pump Alerts is a free, open-source application that runs entirely on your device.
+    It does not collect personal data — no telemetry, no analytics, no cookies, no accounts.
+</p>
+
+<h2>Data the App Processes</h2>
+<p>
+    The App fetches <strong>public market data</strong> from cryptocurrency exchange APIs
+    (prices, trading volumes, candlestick data). This data is processed locally on your device
+    and is not sent to any server controlled by the project maintainers.
+</p>
+<p>
+    All application data (signals, settings, detection rules) is stored in a local SQLite database
+    on your device. We have no access to this data.
+</p>
+
+<h2>Data We May Receive From You</h2>
+<p>
+    <strong>Support messages:</strong> If you contact us via email for support or bug reports,
+    we receive your message and contact details in order to reply. We do not sell or rent personal information.
+</p>
+
+<h2>Third-Party Services</h2>
+<p>
+    The App fetches public market data directly from exchange APIs. Your IP address is visible to these
+    exchanges when the App makes API requests. Your use of these services is subject to their own terms
+    and privacy policies.
+</p>
+<p>
+    Donations are processed by <strong>NOWPayments</strong>, a third-party payment gateway.
+    If you choose to donate, your transaction is handled entirely by NOWPayments under their own
+    <a href="https://nowpayments.io/doc/tos.pdf" target="_blank" rel="noopener noreferrer">terms</a> and
+    <a href="https://nowpayments.io/doc/privacy.pdf" target="_blank" rel="noopener noreferrer">privacy policy</a>.
+    We do not receive or store any personal data from your transaction.
+</p>
+
+<h2>How We Use Information</h2>
+<ul>
+    <li>To reply to support requests and bug reports.</li>
+    <li>To comply with applicable legal obligations.</li>
+</ul>
+
+<h2>Data Retention</h2>
+<p>
+    Support messages are kept only as long as needed to handle your request.
+    You can ask us to delete your messages after a case is closed.
+</p>
+
+<h2>Security</h2>
+<p>
+    The App runs locally and does not transmit your data to external servers.
+    You are responsible for securing your device and any local files or databases created by the App.
+</p>
+
+<h2>Your Rights</h2>
+<p>
+    Depending on your location (e.g., EU/EEA/UK GDPR, California CCPA/CPRA), you may have rights to access,
+    correct, delete, or restrict processing of your data, and to lodge a complaint with a supervisory authority.
+    To make a request, contact us via email.
+</p>
+
+<h2>Children</h2>
+<p>
+    The App is intended for adults (18+). We do not knowingly collect information from minors.
+</p>
+
+<h2>Changes</h2>
+<p>
+    If we change this policy, we will update the text on this page.
+    Continued use of the App after changes means you accept the updated policy.
+</p>
+
+<h2>Contact</h2>
+<p>
+    Email: <strong>{{ support_email }}</strong>
+</p>
+{% endblock %}

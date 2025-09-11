@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<section class="feature-page">
+    <header class="feature-header">
+        <h1 class="feature-title">{{ title }}</h1>
+        {% if subtitle %}
+        <p class="feature-subtitle">{{ subtitle }}</p>
+        {% endif %}
+    </header>
+
+    {% block body %}{% endblock %}
+</section>
+{% endblock %}
