@@ -104,10 +104,10 @@ echo "SECRET_KEY=$(python -c 'import secrets; print(secrets.token_hex(32))')" > 
 # Initialize the database
 flask --app app:create_app init-db
 
-# Start the screener (background process)
-flask --app app:create_app screener-run &
+# Start the screener (in a separate terminal)
+flask --app app:create_app screener-run
 
-# Start the web server
+# Start the web server (in another terminal)
 flask --app app:create_app run
 ```
 
