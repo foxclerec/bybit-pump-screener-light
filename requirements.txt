@@ -19,7 +19,7 @@ pystray>=0.19.5
 pywebview>=5.0
 Pillow>=10.0.0
 six==1.17.0
-SQLAlchemy==2.0.43
+SQLAlchemy==2.0.48
 typing_extensions==4.15.0
 tzdata==2025.2
 Werkzeug==3.1.3
