@@ -153,9 +153,9 @@ This is an early release, and like any v1 — bugs happen. Even Windows ships pa
 
 If you find this useful, consider supporting the project:
 
-- [Ko-fi](https://ko-fi.com/pump_screener)
-- [Crypto donation](https://nowpayments.io/donation/pump_screener)
-- Trade on [Bybit](https://www.bybit.com/invite?ref=D5YARGK) using my referral link
+- ☕ [Ko-fi](https://ko-fi.com/pump_screener)
+- 🪙 [Crypto donation](https://nowpayments.io/donation/pump_screener)
+- 📈 Trade on [Bybit](https://www.bybit.com/invite?ref=D5YARGK) using my referral link
 
 ---
 
