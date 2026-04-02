@@ -149,6 +149,9 @@
       case "reset-all":
         resetAll();
         break;
+      case "check-update":
+        checkForUpdate(btn);
+        break;
     }
   });
 
@@ -661,6 +664,31 @@
     el.addEventListener('change', () => autoSave('display', saveDisplay));
   });
 
+  // ---- Update check ----
+  async function checkForUpdate(btn) {
+    const origHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ri-loader-4-line spin"></i> Checking…';
+    try {
+      const r = await fetch('/api/update-check', { cache: 'no-store' });
+      if (!r.ok) throw new Error('Request failed');
+      const data = await r.json();
+      if (data.available && data.latest_version) {
+        const link = data.download_url
+          ? ` <a href="${data.download_url}" target="_blank" rel="noopener">Download v${data.latest_version}</a>`
+          : '';
+        showToast(`New version v${data.latest_version} available!${link}`);
+      } else {
+        showToast('You are on the latest version');
+      }
+    } catch (_) {
+      showErrorToast('Could not check for updates');
+    } finally {
+      btn.innerHTML = origHtml;
+      btn.disabled = false;
+    }
+  }
+
   // ---- Reset ----
   const _sectionLabels = {
     rules: "Detection Rules",
@@ -713,7 +741,7 @@
     panels.forEach((panel) => {
       const id = panel.getAttribute("data-section-panel");
       if (id === "upgrade") {
-        panel.classList.toggle("is-hidden", name === "reset");
+        panel.classList.toggle("is-hidden", name === "reset" || name === "about");
       } else {
         panel.classList.toggle("is-hidden", id !== name);
       }

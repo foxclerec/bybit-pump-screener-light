@@ -29,5 +29,13 @@ class KlineCache:
     def clear(self) -> None:
         self._store.clear()
 
+    def purge_expired(self) -> int:
+        """Remove entries older than TTL. Returns number of entries removed."""
+        now = time.monotonic()
+        expired = [k for k, (ts, _) in self._store.items() if (now - ts) >= self._ttl]
+        for k in expired:
+            del self._store[k]
+        return len(expired)
+
     def __len__(self) -> int:
         return len(self._store)

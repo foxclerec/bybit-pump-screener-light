@@ -10,6 +10,7 @@
         <a href="#filters" class="settings-sidebar-link" data-nav="filters">Filters</a>
         <a href="#notifications" class="settings-sidebar-link" data-nav="notifications">Notifications</a>
         <a href="#display" class="settings-sidebar-link" data-nav="display">Display</a>
+        <a href="#about" class="settings-sidebar-link" data-nav="about">About</a>
         <a href="#reset" class="settings-sidebar-link" data-nav="reset">Reset</a>
     </nav>
 
@@ -288,6 +289,35 @@
             <p>Need more exchanges, custom rules, or a personal setup?</p>
             <a href="{{ url_for('site.upgrade') }}" class="settings-upgrade-link">See available services</a>
         </div>
+
+        <!-- ─── About ─────────────────────────── -->
+        <section id="about" class="settings-section is-hidden" data-section-panel="about">
+            <h2 class="settings-section-title">About</h2>
+
+            <div class="settings-rows">
+                <div class="settings-row">
+                    <div>
+                        <label>Version</label>
+                        <p class="settings-section-hint">{{ app_version }}</p>
+                    </div>
+                    <button type="button" data-action="check-update" class="btn btn-ghost">
+                        <i class="ri-refresh-line"></i> Check for updates
+                    </button>
+                </div>
+
+                <div class="settings-row">
+                    <div>
+                        <label>Source code</label>
+                        <p class="settings-section-hint">Open-source on GitHub</p>
+                    </div>
+                    <a href="{{ github_repo_url }}" target="_blank" rel="noopener" class="btn btn-ghost">
+                        <i class="ri-github-fill"></i> GitHub
+                    </a>
+                </div>
+
+
+            </div>
+        </section>
 
         <!-- ─── Reset ─────────────────────────── -->
         <section id="reset" class="settings-section is-hidden" data-section-panel="reset">

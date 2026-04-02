@@ -83,6 +83,10 @@ def create_app() -> Flask:
             "nowpayments_referral_url": NOWPAYMENTS_REFERRAL_URL,
         }
 
+    # Check for updates in background (non-blocking)
+    from .services.update_checker import check_on_startup
+    check_on_startup()
+
     @app.cli.command("init-db")
     def init_db():
         from .models import DetectionRule

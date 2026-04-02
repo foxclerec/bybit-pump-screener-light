@@ -148,13 +148,14 @@ def _mci_alias(path: Path) -> str:
 def _mci_close_later(alias: str, delay: float = 10.0) -> None:
     """Close MCI alias after a delay to prevent resource leaks."""
     def _closer():
-        time.sleep(delay)
         try:
             import ctypes
             ctypes.windll.winmm.mciSendStringW(f"close {alias}", None, 0, None)
         except Exception:
             pass
-    threading.Thread(target=_closer, daemon=True).start()
+    timer = threading.Timer(delay, _closer)
+    timer.daemon = True
+    timer.start()
 
 
 def _play_mci(path: Path, volume: int) -> bool:
@@ -380,8 +381,8 @@ def play_alert(rule_name: str = "default") -> None:
     if cooldown > 0:
         now = time.monotonic()
         cutoff = now - cooldown
-        # Trim timestamps outside the window
-        _recent_plays[:] = [t for t in _recent_plays if t > cutoff]
+        # Trim timestamps outside the window (cap at 100 to prevent unbounded growth)
+        _recent_plays[:] = [t for t in _recent_plays if t > cutoff][-100:]
         if len(_recent_plays) >= _BURST_THRESHOLD:
             logger.debug("[alert] Burst suppressed (%d sounds in %ds window)",
                          len(_recent_plays), cooldown)

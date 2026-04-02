@@ -124,7 +124,7 @@ def main() -> None:
         title=f"Pump Screener v{APP_VERSION}",
         url=f"http://127.0.0.1:{port}",
         width=1200,
-        height=800,
+        height=900,
         confirm_close=True,
     )
 

@@ -194,10 +194,26 @@ def run_screener(app) -> None:
         last_network_ok = True
         ws_disconnected_polls = 0
         ws_was_fallback = False
+        _loop_n = 0
+        _last_loop_wall = time.time()
+        _SLEEP_GAP_SEC = 30.0  # wall-clock gap to detect system sleep
 
         while not _shutdown.is_set():
+            _loop_n += 1
             loop_start = time.time()
             now_ts = time.time()
+
+            # Detect system sleep: if wall-clock gap >> poll interval, request restart
+            wall_gap = now_ts - _last_loop_wall
+            if wall_gap > _SLEEP_GAP_SEC and _loop_n > 1:
+                _log(f"STATUS  System wake detected (gap={wall_gap:.0f}s), requesting restart...")
+                set_metric(app.instance_path, "active_count", None, namespace="screener")
+                set_metric(app.instance_path, "needs_restart", True, namespace="screener")
+            _last_loop_wall = now_ts
+
+            # Periodic cache maintenance (every ~50 cycles / ~10 min)
+            if _loop_n % 50 == 0:
+                cache.purge_expired()
 
             # Fresh session every cycle — sees changes from web server
             db.session.remove()
@@ -247,6 +263,7 @@ def run_screener(app) -> None:
                         set_metric(app.instance_path, "active_count", len(symbols), namespace="screener")
                 except Exception as e:
                     _log(f"WARN    Active rebuild failed: {e}")
+                    set_metric(app.instance_path, "active_count", None, namespace="screener")
                 finally:
                     next_active_rebuild = now_ts + ACTIVE_REBUILD_SEC
 
@@ -329,6 +346,7 @@ def run_screener(app) -> None:
             if (not any_fetch_ok) and last_network_ok:
                 _log("STATUS  Network DOWN — retrying...")
                 last_network_ok = False
+                set_metric(app.instance_path, "active_count", None, namespace="screener")
             elif any_fetch_ok and (not last_network_ok):
                 _log("STATUS  Network restored")
                 last_network_ok = True

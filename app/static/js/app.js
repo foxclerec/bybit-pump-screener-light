@@ -339,6 +339,20 @@ async function refreshFooterStatus() {
         }
       }
     }
+
+    // Sleep/wake restart prompt
+    if (s.needs_restart && !window._restartShown) {
+      window._restartShown = true;
+      showModal(
+        "The app was interrupted by sleep mode and needs to restart to restore real-time data.",
+        { confirm: false, confirmLabel: "Restart" }
+      ).then(() => {
+        fetch("/api/restart", {
+          method: "POST",
+          headers: { "X-CSRFToken": csrfToken() },
+        });
+      });
+    }
   } catch (_) {
     setBadge(exDot, exLabel, "down", "bybit", "bybit");
     setBadge(screenerDot, screenerLabel, "down", "screener", "screener");
@@ -347,6 +361,11 @@ async function refreshFooterStatus() {
 
 setInterval(refreshFooterStatus, UI_STATUS_POLL_MS);
 window.addEventListener("load", refreshFooterStatus);
+
+// Immediate refresh when page becomes visible (after sleep/minimize)
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) refreshFooterStatus();
+});
 
 
 // --- Mute toggle -------------------------------------------------------------
@@ -391,6 +410,54 @@ window.addEventListener("load", refreshFooterStatus);
   // Poll mute state alongside status polling
   setInterval(pollMute, UI_STATUS_POLL_MS);
   window.addEventListener("load", pollMute);
+})();
+
+
+// --- Update check (GitHub Releases) ------------------------------------------
+(function checkForUpdate() {
+  const DISMISS_KEY = '_update_dismissed';
+
+  async function run() {
+    // Don't nag if user already dismissed this session
+    const dismissed = sessionStorage.getItem(DISMISS_KEY);
+
+    try {
+      const r = await fetch('/api/update-check', { cache: 'no-store' });
+      if (!r.ok) return;
+      const data = await r.json();
+      if (!data.available || !data.latest_version) return;
+
+      // If user dismissed this exact version, skip
+      if (dismissed === data.latest_version) return;
+
+      showUpdateToast(data.latest_version, data.download_url);
+    } catch (_) { /* silent */ }
+  }
+
+  function showUpdateToast(version, url) {
+    const container = document.getElementById('global-toast-container');
+    if (!container) return;
+
+    const el = document.createElement('div');
+    el.className = 'toast toast-update';
+    el.innerHTML =
+      `<i class="ri-download-2-line toast-icon"></i>` +
+      `<span class="toast-message">New version <strong>v${version}</strong> available</span>` +
+      (url ? `<a href="${url}" target="_blank" rel="noopener" class="toast-action">Download</a>` : '') +
+      `<button data-action="toast-dismiss" class="toast-dismiss" aria-label="Dismiss">` +
+      `<i class="ri-close-line"></i></button>`;
+
+    el.querySelector('[data-action="toast-dismiss"]').addEventListener('click', () => {
+      sessionStorage.setItem(DISMISS_KEY, version);
+      el.classList.add('toast-exit');
+      setTimeout(() => el.remove(), 300);
+    });
+
+    container.appendChild(el);
+  }
+
+  // Check once after page loads (with a small delay to not block rendering)
+  setTimeout(run, 3000);
 })();
 
 

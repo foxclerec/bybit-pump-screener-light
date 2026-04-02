@@ -106,6 +106,27 @@ class BybitKlineWS:
             self._reconnect_thread = None
         logger.info("Bybit WS stopped")
 
+    def force_restart(self) -> None:
+        """Force-kill and restart the WebSocket (e.g. after system sleep)."""
+        logger.info("Bybit WS force restart")
+        if self._ws is not None:
+            try:
+                self._ws.exit()
+            except Exception:
+                pass
+            self._ws = None
+        self._connected = False
+        self._reconnect_attempt = 0
+        self._last_data_at = None
+        self._cb.record_success()
+        self._wm = KlineWindowManager(self._window_size)
+        self._start_ws()
+        # Re-subscribe to all symbols
+        if self._ws and self._connected and self._subscribed:
+            subs = list(self._subscribed)
+            self._subscribed.clear()
+            self.subscribe(subs)
+
     def _schedule_reconnect(self) -> None:
         """Start a background reconnect loop with exponential backoff."""
         if self._stop_event.is_set() or not self._subscribed:

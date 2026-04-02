@@ -22,13 +22,9 @@ venv/
 .DS_Store
 Thumbs.db
 
-# SQLite database and migrations
-instance/*.db
-instance/*.sqlite3
+# Instance (DB, runtime data, secrets)
+instance/
 *.sqlite3
-
-# Runtime data
-instance/runtime_metrics.json
 logs/
 
 # Flask / Cache / Build
@@ -62,10 +58,22 @@ app/static/js/*.min.js
 
 # Claude Code config (private hooks, rules, commands)
 .claude/
+CLAUDE.md
+
+# MCP config (local paths)
+.mcp.json
+
+# Playwright MCP
+.playwright-mcp/
 
 # Local docs (private research, plans, decisions)
 docs/
+_plan.md
 ROADMAP.md
+
+# PyInstaller artifacts
+*.exe
+*.spec
 
 # Screenshots
 *.png
@@ -74,6 +82,10 @@ ROADMAP.md
 *.gif
 *.bmp
 *.webp
+
+# Allow assets/ for README images
+!assets/
+!assets/**
 
 # Test artifacts
 tests/screenshots/

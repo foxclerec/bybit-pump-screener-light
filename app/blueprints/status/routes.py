@@ -4,6 +4,7 @@ import time
 import threading
 import httpx
 from flask import jsonify
+from app.extensions import csrf
 from . import bp
 
 # ==== Tunables (edit in code) ================================================
@@ -11,7 +12,7 @@ from . import bp
 from app.constants import BYBIT_API_BASE
 STATUS_PING_ENDPOINT = "/v5/market/time"   # lightweight "are you alive?"
 STATUS_TIMEOUT_SEC = 5                     # HTTP timeout for a single probe
-STATUS_CACHE_TTL_SEC = 15                  # don't probe more often than this
+STATUS_CACHE_TTL_SEC = 5                   # don't probe more often than this
 STATUS_OFFLINE_AFTER_SEC = 35              # age threshold to declare offline
 STATUS_FAILS_TO_OFFLINE = 2                # consecutive network fails needed
 
@@ -132,9 +133,11 @@ def get_exchange_status():
         payload["active_count"] = get_metric(ipath, "active_count", namespace="screener")
         age = get_metric_age_sec(ipath, "active_count", namespace="screener")
         payload["screener_alive"] = age is not None and age < 30.0
+        payload["needs_restart"] = bool(get_metric(ipath, "needs_restart", namespace="screener"))
     except Exception:
         payload["active_count"] = None
         payload["screener_alive"] = False
+        payload["needs_restart"] = False
 
     return jsonify(payload)
 
@@ -152,8 +155,57 @@ def get_mute():
 
 
 @bp.post("/mute")
+@csrf.exempt
 def toggle_mute():
     """Toggle mute state and return new value."""
     from app.screener.utils.tray import toggle_muted
     new_state = toggle_muted()
     return jsonify({"muted": new_state})
+
+
+@bp.post("/restart")
+@csrf.exempt
+def restart_app():
+    """Trigger full application restart (after sleep/wake)."""
+    import os
+    import sys
+    import subprocess
+    from app.screener.runner import _shutdown
+
+    # Signal screener to stop
+    _shutdown.set()
+
+    # Clear needs_restart flag
+    try:
+        from flask import current_app
+        from app.screener.metrics_store import set_metric
+        set_metric(current_app.instance_path, "needs_restart", False, namespace="screener")
+    except Exception:
+        pass
+
+    # Launch a new process with delay so current one has time to fully exit
+    if getattr(sys, "frozen", False):
+        exe = sys.executable
+        # Use cmd /c with timeout to delay the new process start
+        subprocess.Popen(
+            f'cmd /c timeout /t 3 /nobreak >nul && "{exe}"',
+            shell=True, close_fds=True,
+            creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NO_WINDOW,
+        )
+
+    # Exit current process
+    import threading
+    def _delayed_exit():
+        import time
+        time.sleep(0.5)
+        os._exit(0)
+    threading.Thread(target=_delayed_exit, daemon=True).start()
+
+    return jsonify({"ok": True, "message": "Restarting..."})
+
+
+@bp.get("/update-check")
+def update_check():
+    """Return cached update-availability info (GitHub Releases)."""
+    from app.services.update_checker import get_update_info
+    return jsonify(get_update_info())
