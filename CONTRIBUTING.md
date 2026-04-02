@@ -39,8 +39,6 @@ We use a **single-branch** workflow — all work targets `main`.
 
 Releases are cut from `main` via git tags (`v1.0.0`, `v1.1.0`, etc.).
 
-> **Note:** The `dev` branch is a read-only archive of the original development history. Do not push to it or target PRs at it.
-
 ## Pull Request Guidelines
 
 1. **One PR = one change** — keep it focused
