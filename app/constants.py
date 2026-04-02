@@ -44,7 +44,7 @@ CB_FAILURE_THRESHOLD = 5
 CB_OPEN_DURATION_SEC = 30.0
 
 # --- App version (single source of truth) ---
-APP_VERSION = "1.44.0"
+APP_VERSION = "1.43.1"
 
 # --- Project links & contact ---
 GITHUB_REPO_URL = "https://github.com/foxclerec/bybit-pump-screener-light"
