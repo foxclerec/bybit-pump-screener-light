@@ -26,9 +26,11 @@ def create_app() -> Flask:
         app.config["SECRET_KEY"] = get_or_create_secret_key(data_dir)
         migrate_instance_db(data_dir)
     else:
-        # Dev mode: SECRET_KEY must come from .env
+        # Dev mode: auto-generate SECRET_KEY if not provided via .env
         if not app.config.get('SECRET_KEY'):
-            raise RuntimeError('SECRET_KEY is not set. Provide it via environment or .env')
+            instance_dir = Path(app.instance_path)
+            instance_dir.mkdir(parents=True, exist_ok=True)
+            app.config["SECRET_KEY"] = get_or_create_secret_key(instance_dir)
 
     Path(app.instance_path).mkdir(parents=True, exist_ok=True)
 

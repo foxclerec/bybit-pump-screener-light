@@ -98,13 +98,7 @@ cd bybit-pump-screener-light
 pip install -r requirements.txt
 ```
 
-Create a `.env` file with a secret key:
-
-```bash
-python -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" > .env
-```
-
-Initialize the database and start:
+Initialize the database:
 
 ```bash
 flask --app app:create_app init-db
