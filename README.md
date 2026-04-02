@@ -95,19 +95,30 @@ The app opens a native window with the signals table. The screener starts automa
 ```bash
 git clone https://github.com/foxclerec/bybit-pump-screener-light.git
 cd bybit-pump-screener-light
-
 pip install -r requirements.txt
+```
 
-# Create a .env file with a secret key
-echo "SECRET_KEY=$(python -c 'import secrets; print(secrets.token_hex(32))')" > .env
+Create a `.env` file with a secret key:
 
-# Initialize the database
+```bash
+python -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" > .env
+```
+
+Initialize the database and start:
+
+```bash
 flask --app app:create_app init-db
+```
 
-# Start the screener (in a separate terminal)
+Open **two terminals** in the project folder:
+
+```bash
+# Terminal 1 — screener
 flask --app app:create_app screener-run
+```
 
-# Start the web server (in another terminal)
+```bash
+# Terminal 2 — web server
 flask --app app:create_app run
 ```
 
